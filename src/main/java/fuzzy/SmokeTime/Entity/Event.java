@@ -17,8 +17,11 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "time")
     private Long time;
+    @Column(name = "repeatable")
     private Boolean repeatable;
 
     @Override

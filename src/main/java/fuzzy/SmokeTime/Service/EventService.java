@@ -4,7 +4,11 @@ import fuzzy.SmokeTime.Entity.Event;
 import fuzzy.SmokeTime.Repository.EventRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 public class EventService {
@@ -16,7 +20,7 @@ public class EventService {
     }
 
     public String getEventByName(String name){
-        final Event eventByName = repository.findEventByName(name);
+        final Event eventByName = repository.getEventByName(name);
         if (eventByName != null){
             return eventByName.toString();
         }
@@ -55,5 +59,23 @@ public class EventService {
     public List<Event> getAllEvents() {
         final List<Event> all = repository.findAll();
         return all;
+    }
+
+    public String generateRandomEvents(Integer count) {
+        try {
+            Random rnd = new Random();
+            final List<Event> eventList = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                final Event event = new Event();
+                event.setName("Test" + rnd.nextInt(10, 99));
+                event.setTime(rnd.nextLong(10000, 99000));
+                event.setRepeatable(rnd.nextBoolean());
+                eventList.add(event);
+            }
+            repository.saveAllAndFlush(eventList);
+            return "В базе были успешно сгенерированы " + eventList.size() + "ивентов";
+        }catch (Exception e){
+            return "Не удалось сгенерировать ивенты";
+        }
     }
 }

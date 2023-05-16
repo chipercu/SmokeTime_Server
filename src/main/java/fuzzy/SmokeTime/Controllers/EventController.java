@@ -28,7 +28,7 @@ public class EventController {
         if (name.equals("null")){
             return "Не задан параметр name , http://localhost:8180/getEventByName?name=Имя ивента";
         }
-        return eventService.getEventByName(name.toUpperCase());
+        return eventService.getEventByName(name);
     }
 
     @DeleteMapping("/deleteEventById/{id}")
@@ -39,6 +39,11 @@ public class EventController {
     @GetMapping("/addEvent")
     public String addEvent(@RequestParam(required = false) String name, @RequestParam(required = false) Long time, @RequestParam(defaultValue = "false") Boolean isRepeatable){
        return eventService.addEvent(name, time, isRepeatable);
+    }
+
+    @GetMapping("/generateRandomEvent")
+    public String generateRandomEvents(@RequestParam(required = false, defaultValue = "3") Integer count){
+        return eventService.generateRandomEvents(count);
     }
 
 
